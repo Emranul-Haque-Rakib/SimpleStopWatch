@@ -12,12 +12,19 @@ public class MainActivity extends AppCompatActivity {
 
     private int seconds=0;
     private boolean running;
+    private  boolean wasRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(savedInstanceState!=null){
+            seconds=savedInstanceState.getInt("seconds");
+            running=savedInstanceState.getBoolean("running");
+            wasRunning=savedInstanceState.getBoolean("wasRunning");
+        }
         Timer();
+
 
 
 
@@ -34,6 +41,29 @@ public class MainActivity extends AppCompatActivity {
 
         running=false;
         seconds=0;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        wasRunning=running;
+        running=false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(wasRunning){
+            running=true;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("seconds",seconds);
+        outState.putBoolean("runnng",running);
+        outState.putBoolean("wasRunning",wasRunning);
     }
 
     private void Timer(){
